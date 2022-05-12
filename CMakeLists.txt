@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 3.0)
+
+set(CMAKE_CXX_STANDARD 17)
+
+project(LearningCpp)
+
+function(add_sources dir srcs)
+    set(curdir ${CMAKE_CURRENT_LIST_DIR}/${dir})
+    file(GLOB children RELATIVE ${curdir} ${curdir}/*)
+    foreach(child ${children})
+        if(IS_DIRECTORY ${curdir}/${child})
+            if (dir STREQUAL ".")
+                add_sources(${child} ${srcs})
+            else()
+                add_sources(${dir}/${child} ${srcs})
+            endif()
+        endif()
+    endforeach()
+    file(GLOB HDRS_LOCAL RELATIVE ${CMAKE_CURRENT_LIST_DIR} ${curdir}/*.h)
+    file(GLOB TMPL_LOCAL RELATIVE ${CMAKE_CURRENT_LIST_DIR} ${curdir}/*.hpp)
+    file(GLOB SRCS_LOCAL RELATIVE ${CMAKE_CURRENT_LIST_DIR} ${curdir}/*.cpp)
+    file(GLOB SRCS_LOCAL RELATIVE ${CMAKE_CURRENT_LIST_DIR} ${SRCS_LOCAL} ${curdir}/*.c)
+    set(SRCS_LOCAL_ALL ${HDRS_LOCAL} ${TMPL_LOCAL} ${SRCS_LOCAL})
+    set(${srcs} ${${srcs}} ${SRCS_LOCAL_ALL} PARENT_SCOPE)
+    if (NOT dir STREQUAL ".")
+        string(REPLACE "/" "\\\\" src_grp ${dir})
+        source_group(${src_grp} FILES ${SRCS_LOCAL_ALL})
+    endif()
+endfunction()
+
+add_executable(LearningCpp "src/App.cpp")
+
+add_subdirectory("src/Domain")
+add_subdirectory("src/Data")
+add_subdirectory("src/Framework")
+
+target_link_libraries(LearningCpp FrameworkLayer)
+
+enable_testing()
+add_subdirectory("test")

@@ -1,0 +1,5 @@
+.vs
+out/
+store.json
+mtest.cpp
+coverageReports
