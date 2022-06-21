@@ -13,7 +13,7 @@ Container::Container(const string& storePath) :
 {};
 
 string Container::handle(const string& commandString) const {
-	const std::vector<string> words = this->string_split(commandString, " ");
+	const std::vector<string> words = this->string_split(commandString, ' ');
 
 	if (words.size() == 0) {
 		return "Please, enter a valid command\n";
@@ -65,6 +65,8 @@ string Container::handleCommand(const Command& command, const std::vector<string
 
 		return "Task removed!\n";
 	}
+
+	throw std::invalid_argument("This should not happen");
 }
 
 string Container::printCommandList() const {
@@ -98,14 +100,16 @@ You can call the program with a path to use that specific json. If not, `store.j
 The program would create the JSON file, if that path does not exist at runtime.)";
 }
 
-std::vector<string> Container::string_split(string const& myString, const char* delimiter) const {
+std::vector<string> Container::string_split(string myString, const char& delimiter) const {
 	std::vector<string> out;
 
-	char* token = strtok(const_cast<char*>(myString.c_str()), delimiter);
-	while (token != nullptr)
+	char* next = NULL;
+
+	char* token = strtok_s(myString.data(), &delimiter, &next);
+	while (token != NULL)
 	{
 		out.push_back(string(token));
-		token = strtok(nullptr, delimiter);
+		token = strtok_s(NULL, &delimiter, &next);
 	}
 
 	return out;

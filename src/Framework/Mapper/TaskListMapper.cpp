@@ -6,8 +6,8 @@ using namespace Framework::Mapper;
 string TasksMapper::map(const std::vector<Task>& tasks) {
 	string output = "";
 
-	int tasksNumber = tasks.size();
-	int tasksMappedNumber = 0;
+	size_t tasksNumber = tasks.size();
+	size_t tasksMappedNumber = 0;
 	for (Task task : tasks) {
 		output += TaskMapper::map(task);
 		

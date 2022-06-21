@@ -64,6 +64,8 @@ namespace Framework::Service {
 				case CommandType::Remove:
 					return "remove";
 				}
+
+				return "not-recognized";
 			}
 		};
 
@@ -86,7 +88,7 @@ namespace Framework::Service {
 		Task validateEditCommandAndCreateTask(const std::vector<string>& editCommandOptions) const;
 		int validateRemoveCommandAndGetId(const std::vector<string>& removeCommandOptions) const;
 
-		std::vector<string> string_split(string const& myString, const char* delimiter) const;
+		std::vector<string> string_split(string myString, const char& delimiter) const;
 
 		string printHelp() const;
 		string printCommandList() const;
